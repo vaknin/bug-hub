@@ -1,7 +1,10 @@
 import React from 'react';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import '../node_modules/jquery/dist/jquery';
+import '../node_modules/popper.js/dist/popper';
+import '../node_modules/bootstrap/dist/js/bootstrap';
 import './App.css';
-import Item from './components/Item';
+import Items from './components/Items';
 import Nav from './components/Nav';
 
 class App extends React.Component{
@@ -35,17 +38,14 @@ class App extends React.Component{
     results: [],
   };
 
-  changeTab = tab => {
-    this.setState({tab});
-  }
-
+  //Search for an item according to a keyword
   searchItem = e => {
 
     let keyword = e.target.value.toString().toLowerCase();
 
     //No input entered, clear results
     if (keyword === ""){
-      this.setState({searching: false, results: []});
+      this.setState({searching: false});
       return;
     }
 
@@ -55,13 +55,9 @@ class App extends React.Component{
     //Loop through all items
     for (let item of this.state.items){
 
-      //Item is in the currently selected tab
-      if (item.tab === this.state.tab){
-
-        //Item matches the specified keyword
-        if (item.tfs.toString().toLowerCase().includes(keyword) || item.title.toString().toLowerCase().includes(keyword) || item.description.toString().toLowerCase().includes(keyword)){
-          results.push(item);
-        }
+      //Item matches the specified keyword
+      if (item.tfs.toString().toLowerCase().includes(keyword) || item.title.toString().toLowerCase().includes(keyword) || item.description.toString().toLowerCase().includes(keyword)){
+        results.push(item);
       }
     }
 
@@ -74,20 +70,11 @@ class App extends React.Component{
     return (
       <div className="container">
   
-        {/* Navigation Row */}
-        <div className="mb-5 d-flex justify-content-center">
-            <Nav search={this.searchItem} changeTab={this.changeTab}/>
-        </div>
+        {/* Nav Bar */}
+        <Nav search={this.searchItem} changeTab={tab => this.setState({tab})}/>
   
-        {/* Items Row */}
-        <div className="row d-flex justify-content-center">
-          {this.state.searching
-          ?
-          this.state.results.map(item => <Item key={item.id} data={item}/>)
-          :
-          this.state.items.map(item => {return item.tab === this.state.tab ? <Item key={item.id} data={item}/>:null})}
-        </div>
-        
+        {/* Items */}
+        <Items tab={this.state.tab} searching={this.state.searching} results={this.state.results} items={this.state.items}/>
       </div>
     );
   }

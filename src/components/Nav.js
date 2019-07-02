@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import NewItemDialog from './NewItemDialog';
 
 export class Nav extends Component {
 
@@ -6,7 +7,7 @@ export class Nav extends Component {
       tab: 'pending',
    };
 
-   switch = (tab, e) => {
+   switch = tab => {
 
       //Switch a tab
       if (tab !== this.state.tab){
@@ -21,9 +22,14 @@ export class Nav extends Component {
 
    render() {
       return (
-         <div className="navbar">
+         <div className="navbar flex-nowrap mb-5 mt-2 d-flex justify-content-center">
+
+            {/* New Item Button - Opens the dialog*/}
+            <button type="button" data-toggle="modal" data-target="#newItemDialog" className="btn btn-outline-secondary mr-5 px-3">New Item</button>
+            <NewItemDialog/>
+
             {/* Navigation */}
-            <ul className="nav nav-tabs mt-2">
+            <ul className="nav nav-tabs flex-nowrap d-flex">
                <li className="nav-item">
                <button onClick={e => {this.switch('pending', e)}} className={"nav-link " + (this.state.tab === 'pending' ? 'active' : undefined)}>Pending</button>
                </li>
@@ -40,8 +46,10 @@ export class Nav extends Component {
 
             {/* Search */}
             <div className="form-inline">
-               <input className="form-control mt-2 ml-3" onInput={this.props.search} type="search" placeholder="Search"/>
+               <input className="form-control ml-5" onInput={this.props.search} type="search" placeholder="Search"/>
             </div>
+
+            
 
          </div>
       )

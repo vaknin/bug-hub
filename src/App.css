@@ -15,24 +15,38 @@ a {
   color: slateblue;
 }
 
-button:focus {
+button:focus, button:active {
   outline:0;
+  box-shadow: none !important;
 }
 
 /* Navigation */
-.nav-link, .nav-link:hover{
+.nav-link{
   background: #fff;
   color: rgb(65, 65, 65);
   transition: 0.15s ease-in background;
 }
+
 .nav-link:hover{
   background: rgb(246, 246, 246);
 }
 
+.btn-outline-secondary{
+  border-color: rgb(222, 222, 222);
+}
+
+.btn:hover{
+  background-color: rgb(246, 246, 246) !important;
+  border-color: rgb(232, 232, 232) !important;
+  color: #888 !important;
+}
+
+.btn, .card{
+  transition: 0.15s ease-in background border;
+}
 
 .card{
   cursor: pointer;
-  transition: 0.15s ease-in background;
 }
 
 .card:hover{
