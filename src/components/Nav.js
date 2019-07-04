@@ -26,7 +26,7 @@ export class Nav extends Component {
 
             {/* New Item Button - Opens the dialog*/}
             <button type="button" data-toggle="modal" data-target="#newItemDialog" className="btn btn-outline-secondary mr-5 px-3">New Item</button>
-            <NewItemDialog/>
+            <NewItemDialog newItem={this.props.newItem} />
 
             {/* Navigation */}
             <ul className="nav nav-tabs flex-nowrap d-flex">
@@ -48,9 +48,6 @@ export class Nav extends Component {
             <div className="form-inline">
                <input className="form-control ml-5" onInput={this.props.search} type="search" placeholder="Search"/>
             </div>
-
-            
-
          </div>
       )
    }

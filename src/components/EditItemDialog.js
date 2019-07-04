@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 export class NewItemDialog extends Component {
+
     render() {
         return (
             <div>
@@ -18,8 +19,9 @@ export class NewItemDialog extends Component {
                                   Lorem ipsum dolor sit amet consectetur adipisicing elit.<br></br>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                               </div>
                               <div className="modal-footer">
-                                  <button type="button" className="btn btn-primary">Add Item</button>
+                                  <button type="button" className="btn btn-primary" data-dismiss="modal">Save</button>
                                   <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                  <button type="button" className="btn btn-danger" onClick={this.props.removeItem} data-dismiss="modal">Delete</button>
                               </div>
                           </div>
                       </div>
