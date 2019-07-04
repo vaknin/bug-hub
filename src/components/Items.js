@@ -9,11 +9,16 @@ export class Items extends Component {
     };
 
     listItems(){
-        //console.log(this.props.results.length);
-        
-        let items = this.props.results.length === 0 ? this.props.items : this.props.results;
-        items = Object.values(items);
-        console.log(items);
+
+        return this.props.items.map(item => 
+            {
+                return(
+                item.tab === this.props.tab // Is the item in the curretly viewed tab?
+                ? 
+                <Item getItem={item => this.setState({activeItem: item})} key={item.key} item={item}/> // Yes -> Display the item
+                : 
+                null) // No -> Don't display the item
+            });
     }
 
     render() {
@@ -24,11 +29,10 @@ export class Items extends Component {
                 {this.listItems()}
 
                 {/* This dialog opens when editing/deleting an Item */}
-                <EditItemDialog item={this.state.activeItem} removeItem={() => this.props.removeItem(this.state.activeItem.id)}/>
+                <EditItemDialog item={this.state.activeItem} removeItem={() => this.props.removeItem(this.state.activeItem.key)}/>
             </div>
         )
     }
 }
 
 export default Items;
-//{this.props[this.props.searching ? 'results' : 'items'].map(item => {return item.tab === this.props.tab ? <Item getItem={item => this.setState({activeItem: item})} key={item.id} item={item}/> : null})}

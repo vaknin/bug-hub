@@ -5,7 +5,7 @@ import React from 'react';
 
 //Bootstrap
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import '../node_modules/jquery/dist/jquery';
+import $ from '../node_modules/jquery/dist/jquery';
 import '../node_modules/popper.js/dist/popper';
 import '../node_modules/bootstrap/dist/js/bootstrap';
 
@@ -43,17 +43,43 @@ class App extends React.Component{
 
   // Get initial items from Firebase and listen for db changes
   constructor(props){
-    super(props)
-    database.on('value', snapshot => { 
-      this.setState({items: snapshot.val()});
+    super(props);
+
+    // Make an array of items
+    database.on('value', snapshot => {
+      
+      let itemsObj = snapshot.val();
+
+      if(itemsObj === null){
+        this.setState({items: []});
+        return;
+      }
+
+      let items = [];
+      let keys = Object.keys(itemsObj);
+
+      //Make the array, add the key as a property to every item
+      for (let key of keys){
+        let item = itemsObj[key];
+        item.key = key;
+        items.push(item);
+      }
+
+      this.setState({items});
     });
   }
 
   // Initial state
   state = {
     tab: 'pending',
-    results: []
+    searching: false,
+    results: [],
+    items: []
   };
+
+  itemsArray(){
+    return Object.values(this.state.items);
+  }
 
   // Search for an item according to a keyword
   searchItem = e => {
@@ -62,13 +88,13 @@ class App extends React.Component{
 
     // No input entered, clear results
     if (keyword === ""){
-      this.setState({ results: [] });
+      this.setState({ searching: false, results: [] });
       return;
     }
 
     // Save all search results to an array
     const results = [];
-    const items = Object.values(this.state.items);
+    const items = this.itemsArray();
 
     // Loop through all items
     for (let item of items){
@@ -80,13 +106,17 @@ class App extends React.Component{
     }
 
     // Update the original items array
-    this.setState({results});
+    this.setState({ searching: true, results });
   }
 
-  newItem = (title, description, tfs) => {
+  newItem = (e, title, description, tfs) => {
+    e.preventDefault(); // Prevent form from refreshing the page
+    e.target.reset(); // Reset form
+    $('#newItemDialog').modal('hide'); // Hide modal
+
+    //Add the new item to the database
     const ref = database.push();
     ref.set({
-      id: this.state.items.length,
       tab: 'pending',
       title, description, tfs
     });
@@ -97,10 +127,9 @@ class App extends React.Component{
 
   }
 
-
   //Delete the selected item from the database
-  removeItem = id => {
-    database.child(id).remove();
+  removeItem = key => {
+    database.child(key).remove();
   }
 
   render(){
@@ -108,10 +137,19 @@ class App extends React.Component{
       <div className="container">
   
         {/* Nav Bar */}
-        <Nav newItem={this.newItem} search={this.searchItem} changeTab={tab => this.setState({tab})}/>
+        <Nav 
+        newItem={this.newItem} 
+        search={this.searchItem} 
+        changeTab={tab => this.setState({tab})}>
+        </Nav>
   
         {/* Items */}
-        {this.state.items ? <Items editItem={this.editItem} removeItem={this.removeItem} tab={this.state.tab} results={this.state.results} items={this.state.items}/> : null}
+        <Items 
+        editItem={this.editItem} 
+        removeItem={this.removeItem} 
+        tab={this.state.tab} 
+        items={this.state.searching ? this.state.results : this.state.items}>
+        </Items>
       </div>
     );
   }
