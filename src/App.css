@@ -4,15 +4,22 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  user-select: none;
 }
 
 body {
   line-height: 1.4;
 }
 
+
+
 a {
   text-decoration: none;
   color: slateblue;
+}
+
+select{
+  cursor: pointer;
 }
 
 button:focus, button:active {

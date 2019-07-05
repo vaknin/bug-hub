@@ -96,8 +96,8 @@ class App extends React.Component {
         // Loop through all items
         for (let item of items) {
             
-            // Item matches the specified keyword
-            if (item.tfs.toString().toLowerCase().includes(keyword) || item.title.toString().toLowerCase().includes(keyword) || item.description.toString().toLowerCase().includes(keyword)) {
+            // Item matches the specified keyword // TODO @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@2
+            if (/*item.tfs.toString().toLowerCase().includes(keyword) || */item.title.toString().toLowerCase().includes(keyword)/* || item.description.toString().toLowerCase().includes(keyword)*/) {
                 results.push(item);
             }
         }
@@ -127,14 +127,16 @@ class App extends React.Component {
         // Initialize an item object, to contain all fields acquired from inputs
         let item = {
             tab: 'pending',
-            date: getDate()
+            date: getDate(),
+            type: 'Supplier'
         };
-        let keys = Object.keys(state);
-
+        
         //Return non-empty fields only
+        let keys = Object.keys(state);
         for(let key of keys){
-            if (state[key] !== undefined){
-                item[key] = state[key];
+            let value = state[key];
+            if (value !== undefined){
+                item[key] = value;
             }
         }
         
@@ -143,22 +145,14 @@ class App extends React.Component {
     }
     
     //Update an item
-    editItem = (e, item, data) => {
-        
+    editItem = (e, item) => {
+
         e.preventDefault(); // Prevent form from refreshing the page
         e.target.reset(); // Reset form
         $('#editItemDialog').modal('hide'); // Hide modal
 
-        if (data){
-
-            // Update the item object with new values
-            for (let key of Object.keys(data)){
-                item[key] = data[key];
-            }
-    
-            // Apply changes to database
-            database.child(item.key).update(item);
-        }
+        // Apply changes to database
+        database.child(item.key).update(item);
     }
     
     //Delete the selected item from the database

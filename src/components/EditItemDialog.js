@@ -1,6 +1,9 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import $ from '../../node_modules/jquery/dist/jquery';
 
 export class EditItemDialog extends Component {
+
+    state = {};
 
     //Dynamically create the dialog, depending on the the item's tab property
     createInputs = () => {
@@ -13,16 +16,21 @@ export class EditItemDialog extends Component {
             return(
                 <div className="form-group">
                     <label htmlFor={name} className="col-form-label">{display}</label>
-                    <input type={type} defaultValue={value} className="form-control" id={name} onInput={e => this.setState({ [name]: e.target.value })} placeholder={placeholder} required={required}/>
+                    <input type={type} defaultValue={value} onInput={e => this.props.updateTemp(name, e.target.value)} className="form-control" id={name}  placeholder={placeholder} required={required}/>
                 </div>
             );
         }
 
         const typeDropdown = () => {
+
             return(
                 <div>
                     <label htmlFor="selectType" className="col-form-label">Type</label>
-                    <select defaultValue={this.props.item.type} className="form-control mb-3" onInput={e => this.setState({ type: e.target.value })} id="selectType" required>
+                    <select
+                        value={this.props.temp.type}
+                        onChange={e => this.props.updateTemp('type', e.target.value)}
+                        className="form-control mb-2" id="selectType"
+                    >
                         <option>Supplier</option>
                         <option>Affiliate</option>
                         <option>Room Mapping</option>
@@ -32,8 +40,8 @@ export class EditItemDialog extends Component {
 
         return(
             <div>
-                {createInput('text', 'title', 'Title', 'A descriptive title for the bug', this.props.item.title, /*true*/null)}
                 {typeDropdown()}
+                {createInput('text', 'title', 'Title', 'A descriptive title for the bug', this.props.item.title, /*true*/null)}
                 {createInput('text', 'description', 'Description', 'A short description of the bug', this.props.item.description, null)}
                 {createInput('text', 'supplier', 'Supplier', 'The supplier causing the bug or affected by it', this.props.item.supplier, /*true*/null)}
                 {createInput('text', 'client', 'Impcated Client', 'Who is suffering from this bug?', this.props.item.client, null)}
@@ -45,10 +53,10 @@ export class EditItemDialog extends Component {
     }
 
     //Dynamically create drop down items, depending on item's tab
-    dropdownButton(){
+    createSetAsButton(){
         return(
         <div className="btn-group" role="group">
-            <button id="btnGroupDrop1" type="button" className="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Set as</button>
+            <button id="btnGroupDrop1" type="button" className="btn btn-warning dropdown-toggle mr-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Set as</button>
             <div className="dropdown-menu" aria-labelledby="btnGroupDrop1">
                 <button type="button" className="dropdown-item btn">Active</button>
                 <button type="button" className="dropdown-item btn">Rejected</button>
@@ -56,26 +64,42 @@ export class EditItemDialog extends Component {
         </div>);
     }
 
+    submitForm = e => {
+        this.props.editItem(e);
+    }
+
+    // Once component has loaded, configure modal to reset form on dismiss
+    componentDidMount() {
+        
+        let modal = document.querySelector('#editItemDialog');
+        let form = document.querySelector('#editItemForm');
+        $(modal).on('hide.bs.modal', () => {
+            form.reset();
+        });
+    }
+
     render() {
         return (
             <div className="modal fade" id="editItemDialog" tabIndex="-1" role="dialog" aria-labelledby="editItemDialogLabel" aria-hidden="true">
-                <div className="modal-dialog modal-dialog-centered" role="document">
-                    <div className="modal-content">
-                        <form id="editItemForm" onSubmit={e => this.props.editItem(e, this.props.item, this.state)}>
-                            {/* Title */}
-                            <div className="modal-header">
-                            <h5 className="modal-title" id="editItemDialogLabel">Edit Item</h5>
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content px-2">
+                        <form id="editItemForm" onSubmit={this.submitForm} autoComplete="off">
 
-                            {/* Buttons */}
-                            <div>
-                                {this.dropdownButton()}
-                                <button type="submit" className="btn btn-success mx-1">Save</button>
-                                <button type="button" className="btn btn-secondary mx-1" data-dismiss="modal">Cancel</button>
-                                <button type="button" className="btn btn-danger mx-1" onClick={() => this.props.removeItem(this.props.item.key)} data-dismiss="modal">Delete</button>
+                            {/* Header */}
+                            <div className="modal-header">
+                                <h5 className="modal-title" id="editItemDialogLabel">Edit Item</h5>
+
+                                {/* Buttons */}
+                                <div>
+                                    {this.createSetAsButton()}
+                                    <button type="submit" className="btn btn-success mx-1">Save</button>
+                                    <button type="button" className="btn btn-secondary mx-1" data-dismiss="modal">Cancel</button>
+                                    <button type="button" className="btn btn-danger mx-1" onClick={() => this.props.removeItem(this.props.item.key)} data-dismiss="modal">Delete</button>
+                                </div>
                             </div>
-                            </div>
+
+                            {/* Body */}
                             <div className="modal-body">
-                            {/* Inputs */}
                             {this.createInputs()}
                             </div>                                
                         </form>
