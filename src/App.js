@@ -109,7 +109,6 @@ class App extends React.Component{
       return `${dd}/${mm}/${yyyy}`
     }
 
-
     e.preventDefault(); // Prevent form from refreshing the page
     e.target.reset(); // Reset form
     $('#newItemDialog').modal('hide'); // Hide modal
@@ -124,8 +123,13 @@ class App extends React.Component{
   }
 
   //Update an item
-  editItem = item => {
-
+  editItem = (e, item, state) => {
+    e.preventDefault(); // Prevent form from refreshing the page
+    e.target.reset(); // Reset form
+    $('#editItemDialog').modal('hide'); // Hide modal
+    //console.log(item);
+    console.log(state);
+    
   }
 
   //Delete the selected item from the database

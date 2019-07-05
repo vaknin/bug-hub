@@ -7,9 +7,9 @@ export class Nav extends Component {
       tab: 'pending',
    };
 
+   //Move between tabs, e.g. Pending to Rejected
    switch = tab => {
 
-      //Switch a tab
       if (tab !== this.state.tab){
 
          //Update state with the new tab
@@ -21,27 +21,31 @@ export class Nav extends Component {
    }
 
    render() {
+
+      //Create tabs dynamically
+      const createTab = name => {
+
+         let capitalized = name[0].toUpperCase() + name.slice(1);
+
+         return(
+         <li className="nav-item">
+                  <button onClick={e => {this.switch(name, e)}} className={"nav-link " + (this.state.tab === name ? 'active' : undefined)}>{capitalized}</button>
+         </li>);
+      }
+
       return (
          <div className="navbar flex-nowrap mb-5 mt-2 d-flex justify-content-center">
 
             {/* New Item Button - Opens the dialog*/}
             <button type="button" data-toggle="modal" data-target="#newItemDialog" className="btn btn-outline-secondary mr-5 px-3">New Item</button>
-            <NewItemDialog newItem={this.props.newItem} />
+            <NewItemDialog tab={this.state.tab} newItem={this.props.newItem} />
 
             {/* Navigation */}
             <ul className="nav nav-tabs flex-nowrap d-flex">
-               <li className="nav-item">
-               <button onClick={e => {this.switch('pending', e)}} className={"nav-link " + (this.state.tab === 'pending' ? 'active' : undefined)}>Pending</button>
-               </li>
-               <li className="nav-item">
-               <button onClick={e => {this.switch('active', e)}} className={"nav-link " + (this.state.tab === 'active' ? 'active' : undefined)}>Active</button>
-               </li>
-               <li className="nav-item">
-               <button onClick={e => {this.switch('completed', e)}} className={"nav-link " + (this.state.tab === 'completed' ? 'active' : undefined)}>Completed</button>
-               </li>
-               <li className="nav-item">
-                  <button onClick={e => {this.switch('rejected', e)}} className={"nav-link " + (this.state.tab === 'rejected' ? 'active' : undefined)}>Rejected</button>
-               </li>
+               {createTab('pending')}
+               {createTab('active')}
+               {createTab('completed')}
+               {createTab('rejected')}
             </ul>
 
             {/* Search */}

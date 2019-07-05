@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import $ from '../../node_modules/jquery/dist/jquery';
 
 export class Item extends Component {
 

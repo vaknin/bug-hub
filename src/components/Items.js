@@ -29,7 +29,7 @@ export class Items extends Component {
                 {this.listItems()}
 
                 {/* This dialog opens when editing/deleting an Item */}
-                <EditItemDialog item={this.state.activeItem} removeItem={() => this.props.removeItem(this.state.activeItem.key)}/>
+                <EditItemDialog item={this.state.activeItem} editItem={this.props.editItem} removeItem={this.props.removeItem}/>
             </div>
         )
     }
