@@ -37,9 +37,9 @@ export class NewItemDialog extends Component {
                                 <div className="modal-body">
                                     <form id="editItemForm" onSubmit={e => this.props.editItem(e, /*this.state.title, this.state.description, this.state.tfs*/this.props.item, this.state)}>
 
-                                        {this.createInput('text', 'title', 'Title', 'A descriptive title for the bug', true)}
+                                        {this.createInput('text', 'title', 'Title', 'A descriptive title for the bug', /*true*/null)}
                                         {this.createInput('text', 'description', 'Description', 'A short description of the bug', null)}
-                                        {this.createInput('number', 'tfs', 'TFS #', 'The TFS number, e.g. 23580', true)}
+                                        {this.createInput('number', 'tfs', 'TFS #', 'The TFS number, e.g. 23580', /*true*/null)}
 
                                         {/* Buttons */}
                                         <div className="modal-footer">

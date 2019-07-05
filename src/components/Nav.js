@@ -4,7 +4,7 @@ import NewItemDialog from './NewItemDialog';
 export class Nav extends Component {
 
    state = {
-      tab: 'pending',
+      tab: 'pending'
    };
 
    //Move between tabs, e.g. Pending to Rejected
@@ -29,7 +29,7 @@ export class Nav extends Component {
 
          return(
          <li className="nav-item">
-                  <button onClick={e => {this.switch(name, e)}} className={"nav-link " + (this.state.tab === name ? 'active' : undefined)}>{capitalized}</button>
+                  <button onClick= {() => this.switch(name) } className={"nav-link " + (this.state.tab === name ? 'active' : undefined)}>{capitalized}</button>
          </li>);
       }
 
@@ -38,7 +38,11 @@ export class Nav extends Component {
 
             {/* New Item Button - Opens the dialog*/}
             <button type="button" data-toggle="modal" data-target="#newItemDialog" className="btn btn-outline-secondary mr-5 px-3">New Item</button>
-            <NewItemDialog tab={this.state.tab} newItem={this.props.newItem} />
+            <NewItemDialog 
+               newItem= {(e, data) => {
+                  this.props.newItem(e, data); // Create the item
+                  this.switch('pending'); // Switch tab to 'Pending'
+            }}/>
 
             {/* Navigation */}
             <ul className="nav nav-tabs flex-nowrap d-flex">

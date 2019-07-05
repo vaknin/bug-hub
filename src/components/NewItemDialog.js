@@ -1,12 +1,9 @@
 import React, {Component} from 'react';
 
 export class NewItemDialog extends Component {
-    
-    state = {
-        title: undefined,
-        description: undefined,
-        tfs: undefined
-    };
+
+    // Store form data here
+    state = {};
     
     createInput = (type, name, display, placeholder, required) => {
         
@@ -16,6 +13,17 @@ export class NewItemDialog extends Component {
               <input type={type} className="form-control" id={name} onInput={e => this.setState({ [name]: e.target.value })} placeholder={placeholder} required={required}/>
           </div>
         );
+    }
+
+    clearState = () => {
+        this.setState({
+            title: undefined,
+            description: undefined,
+            supplier: undefined,
+            client: undefined,
+            tfs: undefined,
+            ticket: undefined,
+        });
     }
     
     render() {
@@ -37,14 +45,19 @@ export class NewItemDialog extends Component {
 
                                 {/* Modal Body */}
                                 <div className="modal-body">
-                                    <form id="newItemForm" onSubmit={e => this.props.newItem(e, this.state.title, this.state.description, this.state.tfs)}>
+                                    <form id="newItemForm" 
+                                        onSubmit={e => {
+                                        this.props.newItem(e, this.state); // Create the item
+                                        this.clearState(); // Clear the state
+                                    }}>
 
                                         {/* Inputs */}
-                                        {this.createInput('text', 'title', 'Title', 'A descriptive title for the bug', true)}
+                                        {this.createInput('text', 'title', 'Title', 'A descriptive title for the bug', /*true*/null)}
                                         {this.createInput('text', 'description', 'Description', 'A short description of the bug', null)}
-                                        {this.createInput('number', 'tfs', 'TFS #', 'The TFS number, e.g. 23580', true)}
+                                        {this.createInput('text', 'supplier', 'Supplier', 'The supplier causing the bug or affected by it', /*true*/null)}
+                                        {this.createInput('text', 'client', 'Impcated Client', 'Who is suffering from this bug?', null)}
+                                        {this.createInput('number', 'tfs', 'TFS #', 'The TFS number, e.g. 23580', /*true*/null)}
                                         {this.createInput('number', 'ticket', 'Ticket #', 'The Ticket\'s number, if exists, e.g. 23580', null)}
-                                        {this.createInput('text', 'clients', 'Impcated Client', 'Who is suffering from this bug?', null)}
                                         
                                         {/* Buttons */}
                                         <div className="modal-footer">
