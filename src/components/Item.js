@@ -4,7 +4,7 @@ export class Item extends Component {
 
     render() {
         return (
-            <div className="card col-7 mb-4" onClick={() => this.props.getItem(this.props.item)} data-toggle="modal" data-target="#editItemDialog">
+            <div className="card col-5 mb-4 mx-2" onClick={() => this.props.getItem(this.props.item)} data-toggle="modal" data-target="#editItemDialog">
                 <div className="card-body text-center">
                     <div className="d-flex">
                         <h5 className="card-title mr-auto">{this.props.item.title}</h5>

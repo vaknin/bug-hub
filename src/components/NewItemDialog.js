@@ -15,9 +15,22 @@ export class NewItemDialog extends Component {
         );
     }
 
+    typeDropdown(){
+        return(
+            <div>
+                <label htmlFor="selectType" className="col-form-label">Type</label>
+                <select className="form-control mb-3" onInput={e => this.setState({ type: e.target.value })} id="selectType" required>
+                    <option>Supplier</option>
+                    <option>Affiliate</option>
+                    <option>Room Mapping</option>
+                </select>
+            </div>);
+    }
+
     clearState = () => {
         this.setState({
             title: undefined,
+            type: undefined,
             description: undefined,
             supplier: undefined,
             client: undefined,
@@ -53,6 +66,7 @@ export class NewItemDialog extends Component {
 
                                         {/* Inputs */}
                                         {this.createInput('text', 'title', 'Title', 'A descriptive title for the bug', /*true*/null)}
+                                        {this.typeDropdown()}
                                         {this.createInput('text', 'description', 'Description', 'A short description of the bug', null)}
                                         {this.createInput('text', 'supplier', 'Supplier', 'The supplier causing the bug or affected by it', /*true*/null)}
                                         {this.createInput('text', 'client', 'Impcated Client', 'Who is suffering from this bug?', null)}

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Item from './Item';
 import EditItemDialog from './EditItemDialog';
+import $ from '../../node_modules/jquery/dist/jquery';
 
 export class Items extends Component {
 
@@ -21,6 +22,16 @@ export class Items extends Component {
             });
     }
 
+    configModal = () => {
+        let modal = document.querySelector('#editItemDialog');
+        let form = document.querySelector('#editItemForm');
+        if (modal && form){
+            $(modal).on('hide.bs.modal', e => {
+                form.reset();
+            });
+        }
+    }
+
     render() {
 
         return (
@@ -30,6 +41,8 @@ export class Items extends Component {
 
                 {/* This dialog opens when editing/deleting an Item */}
                 <EditItemDialog item={this.state.activeItem} editItem={this.props.editItem} removeItem={this.props.removeItem}/>
+                {this.configModal()}
+
             </div>
         )
     }

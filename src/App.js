@@ -144,17 +144,21 @@ class App extends React.Component {
     
     //Update an item
     editItem = (e, item, data) => {
+        
         e.preventDefault(); // Prevent form from refreshing the page
         e.target.reset(); // Reset form
         $('#editItemDialog').modal('hide'); // Hide modal
 
-        // Update the item object with new values
-        for (let key of Object.keys(data)){
-            item[key] = data[key];
-        }
+        if (data){
 
-        // Apply changes to database
-        database.child(item.key).update(item);
+            // Update the item object with new values
+            for (let key of Object.keys(data)){
+                item[key] = data[key];
+            }
+    
+            // Apply changes to database
+            database.child(item.key).update(item);
+        }
     }
     
     //Delete the selected item from the database
