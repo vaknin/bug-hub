@@ -12,6 +12,7 @@ import '../node_modules/bootstrap/dist/js/bootstrap';
 //Firebase
 import * as firebase from '../node_modules/firebase/app';
 import "firebase/database"
+import config from './components/firebase';
 
 //Stylesheet
 import './App.css';
@@ -22,19 +23,8 @@ import Nav from './components/Nav';
 
 //#endregion
 
-//#region Firebase
-const firebaseConfig = {
-  apiKey: "AIzaSyC8DcDLA9ksP2GsAUEfnu0gZm48R5mps9s",
-  authDomain: "bugsmanager-8f66d.firebaseapp.com",
-  databaseURL: "https://bugsmanager-8f66d.firebaseio.com",
-  projectId: "bugsmanager-8f66d",
-  storageBucket: "",
-  messagingSenderId: "345845082304",
-  appId: "1:345845082304:web:3280019aa7596de0"
-};
-
 //Initialize database
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(config);
 let database = firebase.database().ref('items');
 
 //#endregion
@@ -110,6 +100,16 @@ class App extends React.Component{
   }
 
   newItem = (e, title, description, tfs) => {
+
+    const getDate = () =>{
+      var today = new Date();
+      var dd = String(today.getDate()).padStart(2, '0');
+      var mm = String(today.getMonth() + 1).padStart(2, '0');
+      var yyyy = today.getFullYear();
+      return `${dd}/${mm}/${yyyy}`
+    }
+
+
     e.preventDefault(); // Prevent form from refreshing the page
     e.target.reset(); // Reset form
     $('#newItemDialog').modal('hide'); // Hide modal
@@ -118,6 +118,7 @@ class App extends React.Component{
     const ref = database.push();
     ref.set({
       tab: 'pending',
+      date: getDate(),
       title, description, tfs
     });
   }
