@@ -171,15 +171,11 @@ class App extends React.Component {
     changeItemTab = item => {
         $('#changeTabDialog').modal('hide'); // Hide modal
 
-        console.log(item);
-
         // Add 'Closed date' field if set as completed/rejected
         let tab = item.tab;
         if (tab === 'completed' || tab === 'rejected'){
             item.closedate = this.getDate();
         }
-
-        //console.log(item);
 
         database.child(item.key).update(item);
     }

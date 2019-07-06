@@ -1,5 +1,5 @@
 {
-  "name": "managebugs",
+  "name": "bug-hub",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -12,7 +12,7 @@
     "react-dom": "^16.8.6",
     "react-scripts": "3.0.1"
   },
-  "homepage": "http://vaknin.github.io/manage-bugs",
+  "homepage": "http://vaknin.github.io/bug-hub",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
