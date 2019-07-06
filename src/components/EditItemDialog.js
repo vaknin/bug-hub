@@ -1,15 +1,24 @@
 import React, { Component } from 'react';
 import $ from '../../node_modules/jquery/dist/jquery';
 
-export class EditItemDialog extends Component {
+export class EditItemDialog extends Component {    
 
-    state = {};
+    // Once the component has loaded, configure modal to reset form on dismiss (this is called only once in the entire lifycycle)
+    componentDidMount() {
+        
+        let modal = document.querySelector('#editItemDialog');
+        let form = document.querySelector('#editItemForm');
+        $(modal).on('hide.bs.modal', () => {
+            form.reset();
+        });
+    }
 
-    //Dynamically create the dialog, depending on the the item's tab property
+    // Dynamically create inputs
     createInputs = () => {
 
+        // Check if there is no item to return
         if (!this.props.item){
-            return;
+            return null;
         }
 
         const createInput = (type, name, display, placeholder, value, required) => {
@@ -26,11 +35,7 @@ export class EditItemDialog extends Component {
             return(
                 <div>
                     <label htmlFor="selectType" className="col-form-label">Type</label>
-                    <select
-                        value={this.props.temp.type}
-                        onChange={e => this.props.updateTemp('type', e.target.value)}
-                        className="form-control mb-2" id="selectType"
-                    >
+                    <select value={this.props.temp.type} onChange={e => this.props.updateTemp('type', e.target.value)} className="form-control mb-2" id="selectType">
                         <option>Supplier</option>
                         <option>Affiliate</option>
                         <option>Room Mapping</option>
@@ -52,33 +57,53 @@ export class EditItemDialog extends Component {
 
     }
 
-    //Dynamically create drop down items, depending on item's tab
-    createSetAsButton(){
-        return(
-        <div className="btn-group" role="group">
-            <button id="btnGroupDrop1" type="button" className="btn btn-warning dropdown-toggle mr-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Set as</button>
-            <div className="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                <button type="button" className="dropdown-item btn">Active</button>
-                <button type="button" className="dropdown-item btn">Rejected</button>
-            </div>
-        </div>);
-    }
-
+    // Submits the form and sends its data to App.js
     submitForm = e => {
         this.props.editItem(e);
     }
 
-    // Once component has loaded, configure modal to reset form on dismiss
-    componentDidMount() {
-        
-        let modal = document.querySelector('#editItemDialog');
-        let form = document.querySelector('#editItemForm');
-        $(modal).on('hide.bs.modal', () => {
-            form.reset();
-        });
+    // Creates the dropdown button that changes an Item's tab
+    createSetAsBtn = () => {
+
+        // Check if there is no item to return
+        if (!this.props.item){
+            return null;
+        }
+
+        // 'Set as' Button onClick
+        const setItemAs = e => {
+            let newTab = e.target.textContent.toLowerCase();
+            this.props.changeItemTab(newTab);
+        }
+
+        // Dynamically create the dropdown buttons
+        const createButtons = tab => {
+            let currentTab = this.props.item.tab;
+
+            // Don't display 'Set as Pending' if the item is already set to Pending
+            if (currentTab === tab.toLowerCase()){
+                return null;
+            }
+            
+            return <button onClick={setItemAs} type="button" className="dropdown-item btn">{tab}</button>
+        }
+
+        // Render
+        return(
+        <div className="btn-group" role="group">
+            <button id="btnGroupDrop1" type="button" className="btn btn-warning dropdown-toggle mr-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Set as</button>
+            <div className="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                {createButtons('Pending')}
+                {createButtons('Active')}
+                {createButtons('Completed')}
+                {createButtons('Rejected')}
+            </div>
+        </div>);
     }
 
-    render() {
+    // Render
+    render() {            
+
         return (
             <div className="modal fade" id="editItemDialog" tabIndex="-1" role="dialog" aria-labelledby="editItemDialogLabel" aria-hidden="true">
                 <div className="modal-dialog" role="document">
@@ -91,7 +116,7 @@ export class EditItemDialog extends Component {
 
                                 {/* Buttons */}
                                 <div>
-                                    {this.createSetAsButton()}
+                                    {this.createSetAsBtn()}
                                     <button type="submit" className="btn btn-success mx-1">Save</button>
                                     <button type="button" className="btn btn-secondary mx-1" data-dismiss="modal">Cancel</button>
                                     <button type="button" className="btn btn-danger mx-1" onClick={() => this.props.removeItem(this.props.item.key)} data-dismiss="modal">Delete</button>
@@ -100,7 +125,7 @@ export class EditItemDialog extends Component {
 
                             {/* Body */}
                             <div className="modal-body">
-                            {this.createInputs()}
+                                {this.createInputs()}
                             </div>                                
                         </form>
                     </div>

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Item from './Item';
 import EditItemDialog from './EditItemDialog';
+import ChangeTabDialog from './ChangeTabDialog';
+import $ from '../../node_modules/jquery/dist/jquery';
 
 export class Items extends Component {
 
@@ -25,9 +27,25 @@ export class Items extends Component {
         this.setState(temp);
     }
 
-    editItem = e => {
-        this.props.editItem(e, this.state.temp);
+    // Close the edit modal and open the changeTab dialog
+    openTabDialog = tab => {
+        this.setState({newTab: tab}); // Save the new item's tab
+        $('#editItemDialog').modal('hide'); // Close EditItemDialog
+        $('#changeTabDialog').modal('show'); // Open ChangeTabDialog
     }
+
+    // Save the changed item to database
+    changeItemTab = data => {
+
+        let item = this.props.temp;
+        for (let key of Object.keys(data)){
+            item[key] = data[key];
+        }
+
+        console.log(item);
+        //this.props.changeItemTab(item);
+    }
+
 
     render() {
 
@@ -37,7 +55,18 @@ export class Items extends Component {
                 {this.listItems()}
 
                 {/* This dialog opens when editing/deleting an Item */}
-                <EditItemDialog updateTemp={this.updateTemp} temp={this.state.temp} item={this.state.activeItem} editItem={this.editItem} removeItem={this.props.removeItem}/>
+                <EditItemDialog 
+                updateTemp={this.updateTemp} 
+                temp={this.state.temp} 
+                item={this.state.activeItem} 
+                editItem={e => this.props.editItem(e, this.state.temp)} 
+                removeItem={this.props.removeItem} 
+                changeItemTab={this.openTabDialog}/>
+
+                {/* Change an Item's Tab, let the user fill the required fields */}
+                <ChangeTabDialog 
+                tab={this.state.newTab}
+                changeItemTab={this.changeItemTab}/>
             </div>
         )
     }

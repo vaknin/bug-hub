@@ -30,6 +30,8 @@ let database = firebase.database().ref('items');
 //#endregion
 
 class App extends React.Component {
+
+    //#region Initialization
     
     // Get initial items from Firebase and listen for db changes
     constructor(props) {
@@ -70,17 +72,17 @@ class App extends React.Component {
         results: [],
         items: []
     };
+
+    //#endregion
     
-    itemsArray() {
-        return Object.values(this.state.items);
-    }
-    
+    //#region Item Actions
+
     // Search for an item according to a keyword
     searchItem = e => {
         
-        let keyword = e.target.value.toString().toLowerCase();
+        let keyword = e.target.value.toString().toLowerCase(); // Set to lowercase to disable case-sensitivity
         
-        // No input entered, clear results
+        // No input entered, clear results and return
         if (keyword === "") {
             this.setState({
                 searching: false,
@@ -91,14 +93,18 @@ class App extends React.Component {
         
         // Save all search results to an array
         const results = [];
-        const items = this.itemsArray();
-        
-        // Loop through all items
-        for (let item of items) {
-            
-            // Item matches the specified keyword // TODO @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@2
-            if (/*item.tfs.toString().toLowerCase().includes(keyword) || */item.title.toString().toLowerCase().includes(keyword)/* || item.description.toString().toLowerCase().includes(keyword)*/) {
-                results.push(item);
+
+        itemsloop: // Loop through all items
+        for (let item of this.state.items) {
+
+            // Loop through all fields of the item
+            for (let field of Object.values(item)) {
+
+                // If the field has the keyword inside of it, return the item in the results
+                if (field.toLowerCase().includes(keyword)){
+                    results.push(item);
+                    continue itemsloop;
+                }
             }
         }
         
@@ -109,6 +115,7 @@ class App extends React.Component {
         });
     }
     
+    // Creates a new item in the database
     newItem = (e, state) => {
         
         //Get current date
@@ -144,6 +151,11 @@ class App extends React.Component {
         database.push().set(item);
     }
     
+    //Delete the selected item from the database
+    removeItem = key => {
+        database.child(key).remove();
+    }
+
     //Update an item
     editItem = (e, item) => {
 
@@ -154,11 +166,14 @@ class App extends React.Component {
         // Apply changes to database
         database.child(item.key).update(item);
     }
-    
-    //Delete the selected item from the database
-    removeItem = key => {
-        database.child(key).remove();
+
+    // Move an item between tabs
+    changeItemTab = item => {
+        $('#editItemDialog').modal('hide'); // Hide modal
+        database.child(item.key).update(item);
     }
+
+    //#endregion
     
     render() {
         return (
@@ -176,7 +191,8 @@ class App extends React.Component {
                 editItem={this.editItem} 
                 removeItem={this.removeItem} 
                 tab={this.state.tab} 
-                items={this.state.searching ? this.state.results : this.state.items}>
+                items={this.state.searching ? this.state.results : this.state.items}
+                changeItemTab={this.changeItemTab}>
                 </Items>
             </div>
         );
