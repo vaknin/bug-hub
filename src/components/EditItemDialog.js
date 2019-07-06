@@ -74,7 +74,7 @@ export class EditItemDialog extends Component {
         const setItemAs = e => {
             let newTab = e.target.textContent.toLowerCase();
             this.props.updateTemp('tab', newTab);
-            this.props.changeItemTab(newTab);
+            this.props.openTabDialog(newTab);
         }
 
         // Dynamically create the dropdown buttons

@@ -30,7 +30,7 @@ export class Items extends Component {
     // Close the edit modal and open the changeTab dialog
     openTabDialog = tab => {
 
-        $('#editItemDialog').modal('hide'); // Close EditItemDialog
+        $('#editItemDialog').modal('hide'); // Close dialog
 
         // If the target tab is pending/completed, skip tab dialog
         if (tab === 'pending' || tab === 'completed') {
@@ -73,7 +73,7 @@ export class Items extends Component {
                 item={this.state.activeItem} 
                 editItem={e => this.props.editItem(e, this.state.temp)} 
                 removeItem={this.props.removeItem} 
-                changeItemTab={this.openTabDialog}/>
+                openTabDialog={this.openTabDialog}/>
 
                 {/* Change an Item's Tab, let the user fill the required fields */}
                 <ChangeTabDialog 

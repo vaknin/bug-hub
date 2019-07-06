@@ -170,8 +170,8 @@ class App extends React.Component {
     // Move an item between tabs
     changeItemTab = item => {
         $('#changeTabDialog').modal('hide'); // Hide modal
-        console.log($('#changeTabDialog'));
-        
+
+        console.log(item);
 
         // Add 'Closed date' field if set as completed/rejected
         let tab = item.tab;
