@@ -29,21 +29,33 @@ export class Items extends Component {
 
     // Close the edit modal and open the changeTab dialog
     openTabDialog = tab => {
-        this.setState({newTab: tab}); // Save the new item's tab
+
         $('#editItemDialog').modal('hide'); // Close EditItemDialog
+
+        // If the target tab is pending/completed, skip tab dialog
+        if (tab === 'pending' || tab === 'completed') {
+            return this.changeItemTab();
+        }
+
+        this.setState({newTab: tab}); // Save the new item's tab
         $('#changeTabDialog').modal('show'); // Open ChangeTabDialog
     }
 
     // Save the changed item to database
     changeItemTab = data => {
 
-        let item = this.props.temp;
-        for (let key of Object.keys(data)){
-            item[key] = data[key];
+        let item = this.state.temp; // The configured item
+
+        // Data can be empty, e.g. moving to pending doesn't require to send any data
+        if(data !== null && data !== undefined){
+            for (let key of Object.keys(data)){
+                if (data[key] !== undefined){
+                    item[key] = data[key];
+                }
+            }
         }
 
-        console.log(item);
-        //this.props.changeItemTab(item);
+        this.props.changeItemTab(item); // Send to App.js and then to Database
     }
 
 

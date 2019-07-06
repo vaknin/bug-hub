@@ -114,18 +114,18 @@ class App extends React.Component {
             results
         });
     }
+
+    //Get today's current date
+    getDate = () => {
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0');
+        var yyyy = today.getFullYear();
+        return `${dd}/${mm}/${yyyy}`
+    }
     
     // Creates a new item in the database
     newItem = (e, state) => {
-        
-        //Get current date
-        const getDate = () => {
-            var today = new Date();
-            var dd = String(today.getDate()).padStart(2, '0');
-            var mm = String(today.getMonth() + 1).padStart(2, '0');
-            var yyyy = today.getFullYear();
-            return `${dd}/${mm}/${yyyy}`
-        }
         
         e.preventDefault(); // Prevent form from refreshing the page
         e.target.reset(); // Reset form
@@ -134,7 +134,7 @@ class App extends React.Component {
         // Initialize an item object, to contain all fields acquired from inputs
         let item = {
             tab: 'pending',
-            date: getDate(),
+            date: this.getDate(),
             type: 'Supplier'
         };
         
@@ -169,7 +169,18 @@ class App extends React.Component {
 
     // Move an item between tabs
     changeItemTab = item => {
-        $('#editItemDialog').modal('hide'); // Hide modal
+        $('#changeTabDialog').modal('hide'); // Hide modal
+        console.log($('#changeTabDialog'));
+        
+
+        // Add 'Closed date' field if set as completed/rejected
+        let tab = item.tab;
+        if (tab === 'completed' || tab === 'rejected'){
+            item.closedate = this.getDate();
+        }
+
+        //console.log(item);
+
         database.child(item.key).update(item);
     }
 

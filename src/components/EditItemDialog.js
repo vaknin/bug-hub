@@ -73,6 +73,7 @@ export class EditItemDialog extends Component {
         // 'Set as' Button onClick
         const setItemAs = e => {
             let newTab = e.target.textContent.toLowerCase();
+            this.props.updateTemp('tab', newTab);
             this.props.changeItemTab(newTab);
         }
 
