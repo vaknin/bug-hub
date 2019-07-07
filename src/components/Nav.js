@@ -37,7 +37,7 @@ export class Nav extends Component {
          <div className="navbar flex-nowrap mb-5 mt-2 d-flex justify-content-center">
 
             {/* New Item Button - Opens the dialog*/}
-            <button type="button" data-toggle="modal" data-target="#newItemDialog" className="btn btn-primary mr-5 px-3">New Item</button>
+            <button type="button" data-toggle="modal" data-target="#newItemDialog" className="btn btn-outline-primary mr-5 px-3">New Item</button>
             <NewItemDialog 
                newItem= {(e, data) => {
                   this.props.newItem(e, data); // Create the item

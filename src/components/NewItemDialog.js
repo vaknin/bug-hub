@@ -5,7 +5,9 @@ import React, {
 export class NewItemDialog extends Component {
     
     // Store form data here
-    state = {};
+    state = {
+        type: 'Supplier'
+    };
     
     createInput = (type, name, display, placeholder, required) => {
         
@@ -32,7 +34,7 @@ export class NewItemDialog extends Component {
     clearState = () => {
         this.setState({
             title: undefined,
-            type: undefined,
+            type: 'Supplier',
             description: undefined,
             supplier: undefined,
             client: undefined,

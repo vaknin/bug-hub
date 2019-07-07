@@ -5,6 +5,10 @@ export class changeTabDialog extends Component {
 
     //#region Initialization
 
+    state = {
+        priority: 'Unknown'
+    };
+
     // Once the component has loaded, configure modal to reset form on dismiss (this is called only once in the entire lifycycle)
     componentDidMount() {
         
@@ -70,7 +74,7 @@ export class changeTabDialog extends Component {
         const clearState = () => {
             this.setState({
                 status: undefined,
-                priority: undefined,
+                priority: 'Unknown',
                 reason: undefined,
             });
         }
