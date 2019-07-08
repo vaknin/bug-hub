@@ -25,7 +25,7 @@ export class EditItemDialog extends Component {
             return(
                 <div className="form-group">
                     <label htmlFor={name} className="col-form-label">{display}</label>
-                    <input type={type} defaultValue={value} onInput={e => this.props.updateTemp(name, e.target.value)} className="form-control" id={name}  placeholder={placeholder} required={required}/>
+                    <input type={type} maxLength={name === 'supplier' ? 3 : undefined} defaultValue={value} onInput={e => this.props.updateTemp(name, e.target.value)} className="form-control" id={name}  placeholder={placeholder} required={required}/>
                 </div>
             );
         }
@@ -43,14 +43,31 @@ export class EditItemDialog extends Component {
                 </div>);
         }
 
+        const priorityDropdown = () => {
+
+            return(
+                <div>
+                    <label htmlFor="select_priority2" className="col-form-label">Priority</label>
+                    <select value={this.props.temp.priority} onChange={e => this.props.updateTemp('priority', e.target.value)} className="form-control" id="select_priority2" required>
+                        <option>Unknown</option>
+                        <option>Low</option>
+                        <option>Medium</option>
+                        <option>High</option>
+                    </select>
+                </div>
+            );
+        }
+
         return(
             <div>
                 {typeDropdown()}
-                {createInput('text', 'title', 'Title', 'A descriptive title for the bug', this.props.item.title, /*true*/null)}
+                {this.props.item.tab === 'active' ? priorityDropdown() : null}
+                {this.props.item.tab === 'rejected' ? createInput('text', 'reason', '* Rejection Reason', 'The main reason the bug was rejected for', this.props.item.reason, true): null}
+                {createInput('text', 'supplier', '* Supplier', 'The supplier the bug deals with, e.g. TRC, EXP', this.props.item.supplier, true)}
+                {createInput('text', 'title', '* Title', 'A descriptive title for the bug', this.props.item.title, true)}
                 {createInput('text', 'description', 'Description', 'A short description of the bug', this.props.item.description, null)}
-                {createInput('text', 'supplier', 'Supplier', 'The supplier causing the bug or affected by it', this.props.item.supplier, /*true*/null)}
                 {createInput('text', 'client', 'Impcated Client', 'Who is suffering from this bug?', this.props.item.client, null)}
-                {createInput('number', 'tfs', 'TFS #', 'The TFS number, e.g. 23580', this.props.item.tfs, /*true*/null)}
+                {createInput('number', 'tfs', '* TFS #', 'The TFS number, e.g. 23580', this.props.item.tfs, true)}
                 {createInput('number', 'ticket', 'Ticket #', 'The Ticket\'s number, if exists, e.g. 23580', this.props.item.ticket, null)}
             </div>
         );

@@ -14,7 +14,7 @@ export class NewItemDialog extends Component {
         return (
             <div className="form-group">
               <label htmlFor={name} className="col-form-label">{display}</label>
-              <input type={type} className="form-control" id={name} onInput={e => this.setState({ [name]: e.target.value })} placeholder={placeholder} required={required}/>
+              <input type={type} maxLength={name === 'supplier' ? 3 : undefined} className="form-control" id={name} onInput={e => this.setState({ [name]: e.target.value })} placeholder={placeholder} required={required}/>
           </div>
         );
     }
@@ -23,7 +23,7 @@ export class NewItemDialog extends Component {
         return (
             <div>
                 <label htmlFor="selectType" className="col-form-label">Type</label>
-                <select className="form-control mb-3" onInput={e => this.setState({ type: e.target.value })} id="selectType" required>
+                <select className="form-control mb-3" onInput={e => this.setState({ type: e.target.value })} id="selectType">
                     <option>Supplier</option>
                     <option>Affiliate</option>
                     <option>Room Mapping</option>
@@ -73,11 +73,11 @@ export class NewItemDialog extends Component {
                         {/* Body */}
                         <div className="modal-body">
                             {this.typeDropdown()}
-                            {this.createInput('text', 'title', 'Title', 'A descriptive title for the bug', /*true*/null)}
+                            {this.createInput('text', 'supplier', '* Supplier', 'The supplier the bug deals with, e.g. TRC, EXP', true)}
+                            {this.createInput('text', 'title', '* Title', 'A descriptive title for the bug', true)}
                             {this.createInput('text', 'description', 'Description', 'A short description of the bug', null)}
-                            {this.createInput('text', 'supplier', 'Supplier', 'The supplier causing the bug or affected by it', /*true*/null)}
                             {this.createInput('text', 'client', 'Impcated Client', 'Who is suffering from this bug?', null)}
-                            {this.createInput('number', 'tfs', 'TFS #', 'The TFS number, e.g. 23580', /*true*/null)}
+                            {this.createInput('number', 'tfs', '* TFS #', 'The TFS number, e.g. 23580', true)}
                             {this.createInput('number', 'ticket', 'Ticket #', 'The Ticket\'s number, if exists, e.g. 23580', null)}                                                                        
                         </div>
                     </form>

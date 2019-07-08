@@ -54,7 +54,7 @@ export class Nav extends Component {
 
             {/* Search */}
             <div className="form-inline">
-               <input className="form-control ml-5" onInput={this.props.search} type="search" placeholder="Search"/>
+               <input className="form-control ml-5" spellCheck="false" onInput={this.props.search} type="search" placeholder="Search"/>
             </div>
          </div>
       )

@@ -1,1 +1,2 @@
-## Sort by -> Priority, Old to new, New to old, etc.
+- Sort items
+- Set item col size (4 ~ 12)
